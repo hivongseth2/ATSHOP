@@ -1,89 +1,75 @@
-let products = [
-    {
-        name: 'JBL E55BT KEY BLACK',
-        image1: './images/JBL_E55BT_KEY_BLACK_6175_FS_x1-1605x1605px.png',
-        image2: './images/JBL_LIVE650BTNC_Product Image_Folded_Black.webp',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'JBL JR 310BT',
-        image1: './images/JBL_JR 310BT_Product Image_Hero_Skyblue.png',
-        image2: './images/JBL_JR 310BT_Product Image_Detail_Skyblue.png',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'JBL TUNE 750BTNC',
-        image1: './images/kisspng-beats-electronics-headphones-apple-beats-studio-red-headphones.png',
-        image2: './images/JBL_E55BT_KEY_RED_6063_FS_x1-1605x1605px.webp',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'JBL Horizon',
-        image1: './images/JBLHorizon_001_dvHAMaster.png',
-        image2: './images/JBLHorizon_BLK_002_dvHAMaster.webp',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'JBL Tune 220TWS',
-        image1: './images/JBL_TUNE220TWS_ProductImage_Pink_ChargingCaseOpen.png',
-        image2: './images/JBL_TUNE220TWS_ProductImage_Pink_Back.png',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'UA Project Rock',
-        image1: './images/190402_E1_FW19_EarbudsWCase_S13_0033-1_1605x1605_HERO.png',
-        image2: './images/190402_E1_FW19_EarbudsWCase_S13_0033-1_1605x1605_BACK.png',
-        old_price: '400',
-        curr_price: '300'
-    },
-]
+let filter_col = document.querySelector("#filter-col");
 
-let product_list = document.querySelector('#products')
+document
+  .querySelector("#filter-toggle")
+  .addEventListener("click", () => filter_col.classList.toggle("active"));
 
-renderProducts = (products) => {
-    products.forEach(e => {
-        let prod = `
-            <div class="col-4 col-md-6 col-sm-12">
-                <div class="product-card">
-                    <div class="product-card-img">
-                        <img src="${e.image1}" alt="">
-                        <img src="${e.image2}" alt="">
+document
+  .querySelector("#filter-close")
+  .addEventListener("click", () => filter_col.classList.toggle("active"));
+
+// ======
+
+// const shopNowButtons = document.querySelectorAll(".btn-shop-now");
+
+const product_list = document.querySelector("#products");
+
+fetch("http://localhost:8080/api/product")
+  .then((response) => response.json())
+  .then((data) => {
+    renderProducts(data);
+    // console.log(data);
+  })
+  .catch((error) => console.error(error));
+const renderProducts = (products) => {
+  products.forEach((e) => {
+    let prod = `
+        <div class="col-4 col-md-6 col-sm-12">
+            <div class="product-card">
+                <div class="product-card-img">
+                    <img src="${e.image}" alt="${e.name}">
+                </div>
+                <div class="product-card-info">
+                    <div class="product-btn">
+                        <a href="./product-detail.html" class="btn-flat btn-hover btn-shop-now" data-product-id="${
+                          e.id
+                        }">shop now</a>
+                        <button class="btn-flat btn-hover btn-cart-add">
+                            <i class='bx bxs-cart-add'></i>
+                        </button>
+                        <button class="btn-flat btn-hover btn-cart-add">
+                            <i class='bx bxs-heart'></i>
+                        </button>
                     </div>
-                    <div class="product-card-info">
-                        <div class="product-btn">
-                            <a href="./product-detail.html" class="btn-flat btn-hover btn-shop-now">shop now</a>
-                            <button class="btn-flat btn-hover btn-cart-add">
-                                <i class='bx bxs-cart-add'></i>
-                            </button>
-                            <button class="btn-flat btn-hover btn-cart-add">
-                                <i class='bx bxs-heart'></i>
-                            </button>
-                        </div>
-                        <div class="product-card-name">
-                            ${e.name}
-                        </div>
-                        <div class="product-card-price">
-                            <span><del>${e.old_price}</del></span>
-                            <span class="curr-price">${e.curr_price}</span>
-                        </div>
+                    <div class="id" style="display:none"> ${e.id} </div>
+                    <div class="product-card-name">
+                        ${e.name}
+                    </div>
+                    <div class="product-card-price">
+                        <span>$${e.price.toFixed(2)}</span>
                     </div>
                 </div>
             </div>
-        `
-        product_list.insertAdjacentHTML("beforeend", prod)
-    })
-}
+        </div>
+      `;
+    product_list.insertAdjacentHTML("beforeend", prod);
+  });
 
-renderProducts(products)
-renderProducts(products)
-
-let filter_col = document.querySelector('#filter-col')
-
-document.querySelector('#filter-toggle').addEventListener('click', () => filter_col.classList.toggle('active'))
-
-document.querySelector('#filter-close').addEventListener('click', () => filter_col.classList.toggle('active'))
+  const shopNowButtons = document.querySelectorAll(".btn-shop-now");
+  // console.log(shopNowButtons);
+  shopNowButtons.forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      // event.preventDefault();
+      const productId = event.target.dataset.productId;
+      try {
+        if (localStorage.getItem("productId") != null) {
+          localStorage.removeItem("productId");
+        }
+        localStorage.setItem("productId", String(productId));
+        console.log(localStorage.getItem("productId"));
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  });
+};

@@ -1,0 +1,58 @@
+/* Định dạng body */
+body {
+    background-color: #f8f8f8;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+/* Định dạng phần header */
+h1 {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+}
+
+/* Định dạng phần container */
+.container {
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Định dạng các hàng */
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+/* Định dạng các label */
+.label {
+    width: 40%;
+    font-weight: bold;
+}
+
+/* Định dạng các giá trị */
+.value {
+    width: 60%;
+}
+
+/* Định dạng nút chỉnh sửa */
+.btn-edit {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    
+    transition: background-color 0.3s;
+}
+
+/* Định dạng hover effect cho nút chỉnh sửa */
+.btn-edit:hover {
+    background-color: #555;
+}

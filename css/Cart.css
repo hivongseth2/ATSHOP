@@ -1,0 +1,65 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  
+  th {
+    background-color: #f7f7f7;
+  }
+  
+  img {
+    max-width: 100px;
+    height: auto;
+    display: block;
+    margin: auto;
+  }
+  
+  input[type="number"] {
+    width: 60px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  
+  .total {
+    text-align: right;
+    font-size: 20px;
+    margin-top: 20px;
+  }
+  
+  .total p {
+    font-weight: bold;
+  }
+  
+  .edit-btn,
+  .delete-btn,
+  .checkout-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .edit-btn:hover,
+  .delete-btn:hover,
+  .checkout-btn:hover {
+    background-color: #3e8e41;
+  }
+  
+  .edit-btn:focus,
+  .delete-btn:focus,
+  .checkout-btn:focus {
+    outline: none;
+  }
+  

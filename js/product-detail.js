@@ -1,95 +1,129 @@
-document.querySelectorAll('.product-img-item').forEach(e => {
-    e.addEventListener('click', () => {
-        let img = e.querySelector('img').getAttribute('src')
-        document.querySelector('#product-img > img').setAttribute('src', img)
-    })
-})
+const product_list = document.querySelector("#related-products");
 
-document.querySelector('#view-all-description').addEventListener('click', () => {
-    let content = document.querySelector('.product-detail-description-content')
-    content.classList.toggle('active')
-    document.querySelector('#view-all-description').innerHTML = content.classList.contains('active') ? 'view less' : 'view all'
-})
-
-let products = [
-    {
-        name: 'JBL E55BT KEY BLACK',
-        image1: './images/JBL_E55BT_KEY_BLACK_6175_FS_x1-1605x1605px.png',
-        image2: './images/JBL_LIVE650BTNC_Product Image_Folded_Black.webp',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'JBL JR 310BT',
-        image1: './images/JBL_JR 310BT_Product Image_Hero_Skyblue.png',
-        image2: './images/JBL_JR 310BT_Product Image_Detail_Skyblue.png',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'JBL TUNE 750BTNC',
-        image1: './images/kisspng-beats-electronics-headphones-apple-beats-studio-red-headphones.png',
-        image2: './images/JBL_E55BT_KEY_RED_6063_FS_x1-1605x1605px.webp',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'JBL Horizon',
-        image1: './images/JBLHorizon_001_dvHAMaster.png',
-        image2: './images/JBLHorizon_BLK_002_dvHAMaster.webp',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'JBL Tune 220TWS',
-        image1: './images/JBL_TUNE220TWS_ProductImage_Pink_ChargingCaseOpen.png',
-        image2: './images/JBL_TUNE220TWS_ProductImage_Pink_Back.png',
-        old_price: '400',
-        curr_price: '300'
-    },
-    {
-        name: 'UA Project Rock',
-        image1: './images/190402_E1_FW19_EarbudsWCase_S13_0033-1_1605x1605_HERO.png',
-        image2: './images/190402_E1_FW19_EarbudsWCase_S13_0033-1_1605x1605_BACK.png',
-        old_price: '400',
-        curr_price: '300'
-    },
-]
-
-let product_list = document.querySelector('#related-products')
-
-renderProducts = (products) => {
-    products.forEach(e => {
-        let prod = `
-            <div class="col-4 col-md-6 col-sm-12">
-                <div class="product-card">
-                    <div class="product-card-img">
-                        <img src="${e.image1}" alt="">
-                        <img src="${e.image2}" alt="">
-                    </div>
-                    <div class="product-card-info">
-                        <div class="product-btn">
-                            <a href="./product-detail.html" class="btn-flat btn-hover btn-shop-now">shop now</a>
-                            <button class="btn-flat btn-hover btn-cart-add">
-                                <i class='bx bxs-cart-add'></i>
-                            </button>
-                            <button class="btn-flat btn-hover btn-cart-add">
-                                <i class='bx bxs-heart'></i>
-                            </button>
-                        </div>
-                        <div class="product-card-name">
-                            ${e.name}
-                        </div>
-                        <div class="product-card-price">
-                            <span><del>${e.old_price}</del></span>
-                            <span class="curr-price">${e.curr_price}</span>
-                        </div>
-                    </div>
-                </div>
+const renderProducts = (products) => {
+  products.forEach((product) => {
+    const productCard = `
+      <div class="col-4 col-md-6 col-sm-12">
+        <div class="product-card">
+          <div class="product-card-img">
+            <img src="${product.image}" alt="${product.name}">
+          </div>
+          <div class="product-card-info">
+            <div class="product-btn">
+              <a href="./product-detail.html" class="btn-flat btn-hover btn-shop-now">shop now</a>
+              <button class="btn-flat btn-hover btn-cart-add">
+                <i class='bx bxs-cart-add'></i>
+              </button>
+              <button class="btn-flat btn-hover btn-cart-add">
+                <i class='bx bxs-heart'></i>
+              </button>
             </div>
-        `
-        product_list.insertAdjacentHTML("beforeend", prod)
-    })
-}
+            <div class="product-card-name">
+             ${product.id}. ${product.name}
+            </div>
+            <div class="product-card-price">
+              <span><del>${product.price}</del></span>
+              <span class="curr-price">${product.price}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    console.log(id);
+    product_list.insertAdjacentHTML("beforeend", productCard);
+  });
+};
 
-renderProducts(products)
+const productId = localStorage.getItem("productId");
+
+// Gọi API để lấy thông tin sản phẩm với id tương ứng
+fetch(`http://localhost:8080/api/product/${productId}`)
+  .then((response) => response.json())
+  .then((data) => {
+    // Thêm các thông tin về sản phẩm vào trang HTML
+    const productName = document.querySelector(".product-info h1");
+    productName.textContent = data.name;
+
+    const productBrand = document.querySelector(".product-info-detail a");
+    productBrand.textContent = data.category.name;
+
+    const productDescription = document.querySelector(".product-description");
+    productDescription.textContent = data.description;
+
+    const productPrice = document.querySelector(".product-info-price");
+    productPrice.textContent = `$${data.price}`;
+
+    const productImage = document.querySelector("#product-img img");
+    productImage.src = data.image;
+    ///////////////////////////////////////////
+
+    // Thêm sự kiện click vào nút "add to cart"
+    const addToCartButton = document.querySelector(".btn-flat");
+    addToCartButton.addEventListener("click", () => {
+      const quantity = document.querySelector(".product-quantity").textContent;
+      alert(`Đã thêm ${quantity} sản phẩm "${data.name}" vào giỏ hàng.`);
+    });
+  })
+  .catch((error) => console.error(error));
+//===========
+// Lấy các phần tử HTML cần thiết
+const quantityBtnPlus = document.querySelector(".bx-plus");
+const quantityBtnMinus = document.querySelector(".bx-minus");
+const addToCartBtn = document.querySelector(".btn-flat.btn-hover");
+
+// Lấy token của người dùng
+const data = JSON.parse(localStorage.getItem("data"));
+console.log(data.token);
+
+// Thêm sự kiện click vào nút "add to cart"
+addToCartBtn.addEventListener("click", () => {
+  // Lấy thông tin sản phẩm
+  const productId = localStorage.getItem("productId");
+  const quantity = parseInt(
+    document.querySelector(".product-quantity").textContent
+  );
+
+  // Gửi yêu cầu POST đến API để thêm sản phẩm vào giỏ hàng
+  fetch(
+    `http://localhost:8080/api/cart/add-item?product-id=${productId}&quantity=${quantity}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + data.token,
+      },
+      body: JSON.stringify({
+        productId: productId,
+        quantity: quantity,
+      }),
+    }
+  )
+    .then((response) => {
+      // Xử lý kết quả trả về từ API
+      if (response.ok) {
+        console.log("Sản phẩm đã được thêm vào giỏ hàng");
+      } else {
+        console.log("Đã có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng");
+      }
+    })
+    .catch((error) => {
+      // Xử lý lỗi (nếu có)
+      console.log(error);
+    });
+});
+
+// Thêm sự kiện click vào nút "plus" để tăng số lượng sản phẩm
+quantityBtnPlus.addEventListener("click", () => {
+  const quantityElement = document.querySelector(".product-quantity");
+  let quantity = parseInt(quantityElement.textContent);
+  quantity++;
+  quantityElement.textContent = quantity;
+});
+
+quantityBtnMinus.addEventListener("click", () => {
+  const quantityElement = document.querySelector(".product-quantity");
+  let quantity = parseInt(quantityElement.textContent);
+  if (quantity == 0) return;
+  quantity--;
+
+  quantityElement.textContent = quantity;
+});
